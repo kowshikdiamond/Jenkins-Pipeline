@@ -75,7 +75,7 @@ pipeline {
                 step([
                     $class: 'Mailer',
                     subject: "Jenkins Build ${buildStatus}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Build Status: ${buildStatus}\n\n${DEFAULT_CONTENT}",
+                    body: "Build Status: ${buildStatus}",
                     recipientProviders: [
                         [$class: 'CulpritsRecipientProvider'],
                         [$class: 'RequesterRecipientProvider']
