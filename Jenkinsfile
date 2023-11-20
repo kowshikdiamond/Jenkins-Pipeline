@@ -37,7 +37,7 @@ pipeline {
                             def currentDir = sh(script: 'pwd', returnStdout: true).trim()
 
                             // Copy the key to the current working directory
-                            sh 'cp $KEYFILE ${currentDir}/ssh-key.pem'
+                            sh "cp $KEYFILE ${currentDir}/ssh-key.pem"
 
                             // Run Ansible playbook
                             sh 'ansible-playbook ansible.yaml'
