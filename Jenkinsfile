@@ -32,7 +32,7 @@ pipeline {
                         sh """
                             ansible-playbook -i your_inventory_file \
                                              -e ANSIBLE_SSH_PRIVATE_KEY="$ANSIBLE_SSH_PRIVATE_KEY" \
-                                             ansible.yml
+                                             ansible.yaml
                         """
                     }
                 }
