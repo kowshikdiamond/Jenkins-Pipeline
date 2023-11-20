@@ -67,18 +67,22 @@ pipeline {
     }
 
     post {
-        always {
-            script {
-                def buildStatus = currentBuild.result ?: 'UNKNOWN'
-                echo "Build Status: ${buildStatus}"
+        failure {
+            emailext subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                      body: "The Jenkins build has failed. Build Status: ${currentBuild.result}",
+                      recipientProviders: [
+                          [$class: 'CulpritsRecipientProvider'],
+                          [$class: 'RequesterRecipientProvider']
+                      ]
+        }
 
-                emailext subject: "Jenkins Build ${buildStatus}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                          body: "Build Status: ${buildStatus}",
-                          recipientProviders: [
-                              [$class: 'CulpritsRecipientProvider'],
-                              [$class: 'RequesterRecipientProvider']
-                          ]
-            }
+        success {
+            emailext subject: "Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                      body: "The Jenkins build has completed successfully. Build Status: ${currentBuild.result}",
+                      recipientProviders: [
+                          [$class: 'CulpritsRecipientProvider'],
+                          [$class: 'RequesterRecipientProvider']
+                      ]
         }
     }
 }
