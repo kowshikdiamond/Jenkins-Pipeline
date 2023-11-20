@@ -65,17 +65,23 @@ pipeline {
             }
         }
     }
-    post {
-        
-        failure {
-            echo 'sending email notification from jenkins'
-            
-            step([$class: 'Mailer',
-      notifyEveryUnstableBuild: true,
-      recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'],
-                                      [$class: 'RequesterRecipientProvider']])])
 
-            
+    post {
+        always {
+            script {
+                def buildStatus = currentBuild.result ?: 'UNKNOWN'
+                echo "Build Status: ${buildStatus}"
+
+                step([
+                    $class: 'Mailer',
+                    subject: "Jenkins Build ${buildStatus}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: "Build Status: ${buildStatus}\n\n${DEFAULT_CONTENT}",
+                    recipientProviders: [
+                        [$class: 'CulpritsRecipientProvider'],
+                        [$class: 'RequesterRecipientProvider']
+                    ]
+                ])
+            }
         }
     }
 }
