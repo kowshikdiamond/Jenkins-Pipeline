@@ -1,0 +1,16 @@
+---
+- name: Update apt and create directory
+  hosts: all
+  become: yes 
+  remote_user: ubuntu
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Create directory 'hello'
+      file:
+        path: /home/ubuntu/hello
+        state: directory
+        mode: '0755'
