@@ -72,15 +72,12 @@ pipeline {
                 def buildStatus = currentBuild.result ?: 'UNKNOWN'
                 echo "Build Status: ${buildStatus}"
 
-                step([
-                    $class: 'Mailer',
-                    subject: "Jenkins Build ${buildStatus}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "Build Status: ${buildStatus}",
-                    recipientProviders: [
-                        [$class: 'CulpritsRecipientProvider'],
-                        [$class: 'RequesterRecipientProvider']
-                    ]
-                ])
+                emailext subject: "Jenkins Build ${buildStatus}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                          body: "Build Status: ${buildStatus}",
+                          recipientProviders: [
+                              [$class: 'CulpritsRecipientProvider'],
+                              [$class: 'RequesterRecipientProvider']
+                          ]
             }
         }
     }
