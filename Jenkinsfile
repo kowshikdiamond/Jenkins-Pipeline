@@ -64,16 +64,18 @@ pipeline {
                 }
             }
         }
+    }
+    post {
+        
+        failure {
+            echo 'sending email notification from jenkins'
+            
+            step([$class: 'Mailer',
+      notifyEveryUnstableBuild: true,
+      recipients: emailextrecipients([[$class: 'CulpritsRecipientProvider'],
+                                      [$class: 'RequesterRecipientProvider']])])
 
-        stage('Email Notification') {
-            steps {
-                script {
-                    // Email notification based on build status
-                    emailext subject: "Build Status: ${currentBuild.currentResult}", 
-                              body: "Build ${currentBuild.fullDisplayName} has completed. Result: ${currentBuild.currentResult}",
-                              to: 'kdonekb@gmail.com'
-                }
-            }
+            
         }
     }
 }
