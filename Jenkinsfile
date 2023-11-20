@@ -38,9 +38,13 @@ pipeline {
 
                             // Copy the key to the current working directory
                             sh 'cp $KEYFILE ${currentDir}/ssh-key.pem'
+
+                            // Run Ansible playbook
+                            sh 'ansible-playbook ansible.yaml'
                         }
 
-                        sh 'ansible-playbook ansible.yaml'
+                        // Delete the copied SSH key after Ansible playbook
+                        sh 'rm ${currentDir}/ssh-key.pem'
                     }
                 }
             }
