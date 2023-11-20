@@ -32,7 +32,7 @@ pipeline {
                     // Change to the Ansible directory
                     dir('ansible') {
                         // Copy SSH key to Jenkins server
-                        withCredentials([sshUserPrivateKey(credentialsId: 'ec2-server-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
+                        withCredentials([sshUserPrivateKey(credentialsId: 'aws_private_key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
                             // Get the current working directory
                             def currentDir = sh(script: 'pwd', returnStdout: true).trim()
 
