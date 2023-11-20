@@ -26,17 +26,14 @@ pipeline {
         stage('Configure server with Ansible') {
             steps {
                 script {
-                    // Go back to the main project directory
-                    dir('..') {
-                        // Change to the Ansible directory
-                        dir('ansible') {
-                            // Run Ansible playbook
-                            sh """
-                                ansible-playbook -i your_inventory_file \
-                                                 -e ANSIBLE_SSH_PRIVATE_KEY="$ANSIBLE_SSH_PRIVATE_KEY" \
-                                                 ansible.yaml
-                            """
-                        }
+                    // Change to the Ansible directory
+                    dir('ansible') {
+                        // Run Ansible playbook
+                        sh """
+                            ansible-playbook -i your_inventory_file \
+                                             -e ANSIBLE_SSH_PRIVATE_KEY="$ANSIBLE_SSH_PRIVATE_KEY" \
+                                             ansible.yaml
+                        """
                     }
                 }
             }
