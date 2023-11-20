@@ -64,6 +64,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Email Notification') {
+            steps {
+                script {
+                    // Email notification based on build status
+                    emailext subject: "Build Status: ${currentBuild.currentResult}", 
+                              body: "Build ${currentBuild.fullDisplayName} has completed. Result: ${currentBuild.currentResult}",
+                              to: 'kdonekb@gmail.com'
+                }
+            }
+        }
     }
 }
 
