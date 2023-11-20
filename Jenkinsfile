@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('Create and Configure Server') {
+        stage('Create Server with Terraform') {
             steps {
                 script {
                     // Change to the Terraform directory
@@ -28,23 +28,46 @@ pipeline {
                         // Apply Terraform configuration
                         sh 'terraform apply --auto-approve'
                     }
+                }
+            }
+        }
 
+        stage('Copy SSH Key to Jenkins Server') {
+            steps {
+                script {
                     // Change to the Ansible directory
                     dir('ansible') {
-                        // Copy SSH key to Jenkins server
+                        // Copy SSH key to Jenkins server if it doesn't exist
                         withCredentials([sshUserPrivateKey(credentialsId: 'aws_private_key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
                             // Get the current working directory
                             def currentDir = sh(script: 'pwd', returnStdout: true).trim()
 
-                            // Copy the key to the current working directory
-                            sh "cp $KEYFILE ${currentDir}/ssh-key.pem"
-
-                            // Run Ansible playbook
-                            sh 'ansible-playbook ansible.yaml'
+                            // Check if the file exists before copying
+                            def keyFile = "${currentDir}/ssh-key.pem"
+                            if (!fileExists(keyFile)) {
+                                // Copy the key to the current working directory
+                                sh "cp $KEYFILE ${keyFile}"
+                            }
                         }
                     }
                 }
             }
         }
+
+        stage('Configure Server with Ansible') {
+            steps {
+                script {
+                    // Change to the Ansible directory
+                    dir('ansible') {
+                        // Run Ansible playbook
+                        sh 'ansible-playbook ansible.yaml'
+                    }
+                }
+            }
+        }
     }
+}
+
+def fileExists(String filePath) {
+    return file(filePath).exists()
 }
