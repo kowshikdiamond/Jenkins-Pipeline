@@ -38,6 +38,7 @@ pipeline {
                     dir('ansible') {
                         // Run Ansible playbook
                         withCredentials([file(credentialsId: 'aws_private_key', variable: 'PRIVATE_KEY_FILE')]) {
+                            sh "chmod 600 ${PRIVATE_KEY_FILE}"
                             sh """
                                 ansible-playbook -e ANSIBLE_SSH_PRIVATE_KEY="${PRIVATE_KEY_FILE}" ansible.yaml -vvv
                             """
