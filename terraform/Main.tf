@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 data "aws_key_pair" "existing" {
-  key_name = "local-key-pair"
+  key_name = "jenkins"
 }
 
 data "aws_security_group" "existing" {
