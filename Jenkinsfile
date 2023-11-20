@@ -44,7 +44,7 @@ pipeline {
                         }
 
                         // Delete the copied SSH key after Ansible playbook
-                        sh 'rm ${currentDir}/ssh-key.pem'
+                        sh "rm ${currentDir}/ssh-key.pem"
                     }
                 }
             }
