@@ -8,6 +8,15 @@ pipeline {
     }
 
     stages {
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Install Python dependencies
+                    sh 'pip install boto3 botocore'
+                }
+            }
+        }
+
         stage('Create server') {
             steps {
                 script {
@@ -30,7 +39,7 @@ pipeline {
                     dir('ansible') {
                         // Run Ansible playbook
                         sh """
-                            ansible-playbook -e ANSIBLE_SSH_PRIVATE_KEY="$ANSIBLE_SSH_PRIVATE_KEY" ansible.yaml
+                            ansible-playbook -e ANSIBLE_SSH_PRIVATE_KEY="${env.ANSIBLE_SSH_PRIVATE_KEY}" ansible.yaml
                         """
                     }
                 }
