@@ -4,7 +4,6 @@ pipeline {
     environment {
         AWS_ACCESS_KEY_ID     = credentials('jenkins_aws_access_key_id')
         AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
-        ANSIBLE_SSH_PRIVATE_KEY = credentials('aws_private_key')
     }
 
     stages {
@@ -38,9 +37,11 @@ pipeline {
                     // Change to the Ansible directory
                     dir('ansible') {
                         // Run Ansible playbook
-                        sh """
-                            ansible-playbook -e ANSIBLE_SSH_PRIVATE_KEY="${env.ANSIBLE_SSH_PRIVATE_KEY}" ansible.yaml
-                        """
+                        withCredentials([file(credentialsId: 'aws_private_key', variable: 'PRIVATE_KEY_FILE')]) {
+                            sh """
+                                ansible-playbook -e ANSIBLE_SSH_PRIVATE_KEY="${PRIVATE_KEY_FILE}" ansible.yaml
+                            """
+                        }
                     }
                 }
             }
