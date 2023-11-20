@@ -43,10 +43,10 @@ pipeline {
                             def currentDir = sh(script: 'pwd', returnStdout: true).trim()
 
                             // Check if the file exists before copying
-                            def keyFile = "${currentDir}/ssh-key.pem"
-                            if (!fileExists(keyFile)) {
+                            def keyFile = new File("${currentDir}/ssh-key.pem")
+                            if (!keyFile.exists()) {
                                 // Copy the key to the current working directory
-                                sh "cp $KEYFILE ${keyFile}"
+                                sh "cp $KEYFILE ${currentDir}/ssh-key.pem"
                             }
                         }
                     }
@@ -66,8 +66,4 @@ pipeline {
             }
         }
     }
-}
-
-def fileExists(String filePath) {
-    return file(filePath).exists()
 }
