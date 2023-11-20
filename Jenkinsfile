@@ -39,7 +39,7 @@ pipeline {
                         // Run Ansible playbook
                         withCredentials([file(credentialsId: 'aws_private_key', variable: 'PRIVATE_KEY_FILE')]) {
                             sh """
-                                ansible-playbook -e ANSIBLE_SSH_PRIVATE_KEY="${PRIVATE_KEY_FILE}" ansible.yaml
+                                ansible-playbook -e ANSIBLE_SSH_PRIVATE_KEY="${PRIVATE_KEY_FILE}" ansible.yaml -vvv
                             """
                         }
                     }
