@@ -30,9 +30,7 @@ pipeline {
                     dir('ansible') {
                         // Run Ansible playbook
                         sh """
-                            ansible-playbook -i your_inventory_file \
-                                             -e ANSIBLE_SSH_PRIVATE_KEY="$ANSIBLE_SSH_PRIVATE_KEY" \
-                                             ansible.yaml
+                            ansible-playbook -e ANSIBLE_SSH_PRIVATE_KEY="$ANSIBLE_SSH_PRIVATE_KEY" ansible.yaml
                         """
                     }
                 }
