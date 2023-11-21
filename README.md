@@ -1,2 +1,1 @@
-# project
-Testing Place
+This project involves a Jenkins pipeline that dynamically creates an EC2 instance on AWS. Ansible is configured to retrieve the public IP address from the AWS account, log in to the instance, update the system, and create a folder. Finally, the pipeline notifies the user about the build status, indicating whether it has been completed successfully or has failed.
